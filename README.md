@@ -12,7 +12,7 @@ TODO explanation (and possibly link to the main assignment)
 1. (optionally) setup a virtual environment
 
         mkdir aecs-env
-		  python -m venv aecs-env
+        python -m venv aecs-env
 
 2. Install dependencies
 
@@ -20,12 +20,25 @@ TODO explanation (and possibly link to the main assignment)
 
 3. Run
 
-    FLASK_APP=hello flask run
+        FLASK_APP=hello flask run
 
-[more info at Flask CLI](http://flask.pocoo.org/docs/1.0/cli/)
+    [more info at Flask CLI](http://flask.pocoo.org/docs/1.0/cli/)
+
+
+## Run Tests
+
+The tests are available in `features/**/*.feature`
+
+Run with:
+
+    behave
 
 
 ## Configuration
+
+* `MONGO_URL`: for example: "mongodb://localhost:27017/my-database"
+* `MONGO_TEST_URL`: for example: "mongodb://localhost/27017/my-test-db"
+* `FLASK_RUN_PORT`: defaults to 5000
 
 TODO (configuration is available at Dockerfile)
 
