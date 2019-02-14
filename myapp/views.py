@@ -2,6 +2,7 @@ from flask import request
 from .db import get_db
 from json import JSONEncoder
 from bson import ObjectId
+from pymongo import ReturnDocument
 
 
 class MyJSONEncoder(JSONEncoder):
@@ -112,3 +113,79 @@ def setup_views(app):
                     ])))
 
         return jsonify(results[0])
+
+    @app.route("/songs/rating", methods=["POST"])
+    def add_rating_route():
+        if "song_id" not in request.args:
+            raise BadRequestException("'song_id' is required")
+        if "rating" not in request.args:
+            raise BadRequestException("'rating' is required")
+
+        song_id = request.args.get("song_id", type=str)
+        rating = request.args.get("rating", type=int)
+
+        if rating > 5:
+            raise BadRequestException(
+                "Rating too high. Must be between 1 and 5.")
+        if rating <= 0:
+            raise BadRequestException(
+                "Rating too low. Must be between 1 and 5.")
+
+        db = get_db()
+        query = {"_id": ObjectId(song_id)}
+
+        song = db.songs.find_one(query)
+
+        if song is None:
+            raise BadRequestException("No such song")
+
+        info = song["ratings"] if "ratings" in song else {
+            "num_ratings": 0,
+            "max_rating": 0,
+            "min_rating": 5,
+            "avg_rating": 0
+        }
+
+        updated_song = db.songs.find_one_and_update(
+            query, {
+                "$set": {
+                    "ratings": {
+                        "num_ratings":
+                        info["num_ratings"] + 1,
+                        "max_rating":
+                        max(rating, info["max_rating"]),
+                        "min_rating":
+                        min(rating, info["min_rating"]),
+                        "avg_rating":
+                        round(((info["num_ratings"] * info["avg_rating"]) +
+                               rating) / (info["num_ratings"] + 1), 1)
+                    }
+                }
+            },
+            return_document=ReturnDocument.AFTER)
+
+        return jsonify(updated_song["ratings"])
+
+    @app.route("/songs/avg/rating")
+    def show_ratings_route():
+        if "song_id" not in request.args:
+            raise BadRequestException("'song_id' is required")
+
+        song_id = request.args.get("song_id", type=str)
+        db = get_db()
+        query = {"_id": ObjectId(song_id)}
+
+        song = db.songs.find_one(query)
+
+        if song is None:
+            raise BadRequestException("No such song")
+
+        info = song["ratings"] if "ratings" in song else {
+            "num_ratings": 0,
+            "max_rating": 0,
+            "min_rating": 0,
+            "avg_rating": 0
+        }
+
+        return jsonify(info)
+

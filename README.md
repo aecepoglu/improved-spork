@@ -1,8 +1,6 @@
 # aec's yousician assignment
 ---------------------------
 
-TODO explanation (and possibly link to the main assignment)
-
 ## Install & Run using Docker
 
     docker-compose up --build
@@ -14,11 +12,18 @@ TODO explanation (and possibly link to the main assignment)
         mkdir aecs-env
         python -m venv aecs-env
 
-2. Install dependencies
+1. Install dependencies
 
         pip install -r requirements.txt
 
-3. Run
+1. Configure
+
+        cp .env.default .env
+		  source .env
+
+    See [configuration](#Configuration) for options
+
+1. Run
 
         FLASK_APP=hello flask run
 
@@ -27,24 +32,23 @@ TODO explanation (and possibly link to the main assignment)
 
 ## Run Tests
 
-The tests are available in `features/**/*.feature`
+All tests are defined in `features/**/*.feature`
 
-Run with:
+Run them with:
 
+	 MONGO_TEST_URL="mongodb://your-mongo:27017/your-test-db"
     behave
 
 
 ## Configuration
 
-* `MONGO_URL`: for example: "mongodb://localhost:27017/my-database"
-* `MONGO_TEST_URL`: for example: "mongodb://localhost/27017/my-test-db"
+* `MONGO_URL`: the mongo url "mongodb://localhost:27017/my-database"
+* `MONGO_TEST_URL`: the mongo url to use in tests "mongodb://localhost/27017/my-test-db"
 * `FLASK_RUN_PORT`: defaults to 5000
-
-TODO (configuration is available at Dockerfile)
 
 ## Development
 
-* lint your code with `pycodestyle *.py`
+* lint your code with `pycodestyle myapp/*.py`
 
 ## Helpful Links
 

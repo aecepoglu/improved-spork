@@ -79,8 +79,10 @@ def check_resp_equals(context, text):
 
 @then(u"the response json should be")
 def check_resp_json_equals(context):
-    ensure(str(context.response.data, "utf-8")).is_equal_to(
-        parse_json_or_cry(context.text, "resp wasn't json"))
+    data = parse_json_or_cry(context.response.data, "resp wasn't json")
+    text = parse_json_or_cry(context.text, "resp wasn't json")
+
+    ensure(data).is_equal_to(text)
 
 
 @then(u"the response at path \"{path}\" should be {value:g}")
