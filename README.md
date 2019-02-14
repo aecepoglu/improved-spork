@@ -4,6 +4,9 @@
 ## Install & Run using Docker
 
     docker-compose up --build
+    # open the same directory in a different terminal
+    docker-compose run myapi init-db
+    # it should now be available at http://localhost:5000
 
 ## Install & Run Locally
 
@@ -11,6 +14,7 @@
 
         mkdir aecs-env
         python -m venv aecs-env
+        source aecs-env/bin/activate
 
 1. Install dependencies
 
@@ -19,13 +23,15 @@
 1. Configure
 
         cp .env.default .env
-		  source .env
+        source .env
 
     See [configuration](#Configuration) for options
 
 1. Run
 
-        FLASK_APP=hello flask run
+        flask init-db
+        flask run
+        # it should now be available at http://localhost:5000
 
     [more info at Flask CLI](http://flask.pocoo.org/docs/1.0/cli/)
 
@@ -34,9 +40,9 @@
 
 All tests are defined in `features/**/*.feature`
 
-Run them with:
+Test all features with:
 
-	 MONGO_TEST_URL="mongodb://your-mongo:27017/your-test-db"
+    MONGO_TEST_URL="mongodb://your-mongo:27017/your-test-db"
     behave
 
 

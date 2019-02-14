@@ -1,8 +1,16 @@
 version: '2'
 services:
+  mongo:
+    image: mongo:3.4
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+
   myapi:
     build: ./
     ports:
       - 5000:5000
+    links:
+      - mongo:mongo
     environment:
       FLASK_RUN_PORT: 5000
