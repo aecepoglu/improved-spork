@@ -2,7 +2,7 @@ Feature: I can find the avg difficulty for all songs
 	Scenario: see the calculation for all songs
 		When I make a GET request to "/songs/avg/difficulty"
 		Then the response status should be 200
-		And the respone json schema should be:
+		And the response json schema should be:
 			"""
 			{
 				"type": "object",

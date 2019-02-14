@@ -1,7 +1,7 @@
 Feature: I can search song artists and titles case insensitively
 	Scenario: An empty search
 		When I make a GET request to "/songs/search"
-		Then the respone json schema should be:
+		Then the response json schema should be:
 			"""
 			{
 				"type": "object",

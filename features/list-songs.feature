@@ -2,7 +2,7 @@ Feature: I can list songs
 	Scenario: list all songs
 		When I make a GET request to "/songs"
 		Then the response status should be 200
-		And the respone json schema should be:
+		And the response json schema should be:
 			"""
 			{
 				"type": "object",
@@ -29,7 +29,7 @@ Feature: I can list songs
 
 	Scenario: list the 1st page of songs
 		When I make a GET request to "/songs?pagesize=3&offset=0"
-		Then the response should be 200
+		Then the response status should be 200
 		And the response at path "$.cur_count" should be 3
 		And the response at path "$.results" should have 3 items
 		And the response at path "$.offset" should be 0
@@ -38,7 +38,7 @@ Feature: I can list songs
 	
 	Scenario: list the final page of songs
 		When I make a GET request to "/songs?pagesize=5&offset=9"
-		Then the response should be 200
+		Then the response status should be 200
 		And the response at path "$.cur_count" should be 2
 		And the response at path "$.pagesize" should be 5
 		And the response at path "$.results[0].name" should be "Vivaldi Allegro Mashup"
