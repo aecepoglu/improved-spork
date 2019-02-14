@@ -42,7 +42,7 @@ All tests are defined in `features/**/*.feature`
 
 Test all features with:
 
-    MONGO_TEST_URL="mongodb://your-mongo:27017/your-test-db"
+    export MONGO_TEST_URL="mongodb://your-mongo:27017/your-test-db"
     behave
 
 
