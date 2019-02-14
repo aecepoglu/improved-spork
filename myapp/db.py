@@ -1,6 +1,6 @@
 import click
 import json
-from pymongo import MongoClient
+from pymongo import MongoClient, TEXT as TEXT_INDEX
 from flask import current_app, g
 from flask.cli import with_appcontext
 
@@ -41,6 +41,8 @@ def reset_db():
 
             db.songs.insert_one(data)
             records_created += 1
+
+    db.songs.create_index([("title", TEXT_INDEX), ("artist", TEXT_INDEX)])
 
     return {"records_created": records_created}
 

@@ -5,6 +5,13 @@ Feature: I can search song artists and titles case insensitively
 			"""
 			{
 				"type": "object",
+				"required": [
+					"offset",
+					"pagesize",
+					"cur_count",
+					"total_count",
+					"results"
+				],
 				"properties": {
 					"offset": {"type": "number"},
 					"pagesize": {"type": "number"},
@@ -15,23 +22,24 @@ Feature: I can search song artists and titles case insensitively
 						"items": {
 							"properties": {
 								"artist": {"type": "string"},
-								"title": {"type": "string"},
+								"title": {"type": "string"}
 							}
 						}
 					}
 				}
 			}
 			"""
+		And the response status should be 200
 		And the response at path "$.results" should have 11 items
 	
-	Scenario: search by artist
-		When I make a GET request to "/songs/search?message=the yousicians"
+	Scenario: search for artist with exact match
+		When I make a GET request to "/songs/search?message=the%20yousicians"
 		Then the response at path "$.results" should have 10 items
 	
-	Scenario: search by title
+	Scenario: search for title with exact match
 		When I make a GET request to "/songs/search?message=babysitting"
 		Then the response at path "$.results" should have 1 items
 
 	Scenario: search partial matches
 		When I make a GET request to "/songs/search?message=sunrise"
-		Then the response at path "$.results" should have 0 items
+		Then the response at path "$.results" should have 1 items

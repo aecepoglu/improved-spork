@@ -6,6 +6,13 @@ Feature: I can list songs
 			"""
 			{
 				"type": "object",
+				"required": [
+					"offset",
+					"pagesize",
+					"cur_count",
+					"total_count",
+					"results"
+				],
 				"properties": {
 					"offset": {"type": "number"},
 					"pagesize": {"type": "number"},
@@ -16,7 +23,7 @@ Feature: I can list songs
 						"items": {
 							"properties": {
 								"artist": {"type": "string"},
-								"title": {"type": "string"},
+								"title": {"type": "string"}
 							}
 						}
 					}
@@ -34,11 +41,11 @@ Feature: I can list songs
 		And the response at path "$.results" should have 3 items
 		And the response at path "$.offset" should be 0
 		And the response at path "$.pagesize" should be 3
-		And the response at path "$.results[0].name" should be "Lycanthropic Metamorphosis"
+		And the response at path "$.results[0].title" should be "Lycanthropic Metamorphosis"
 	
 	Scenario: list the final page of songs
 		When I make a GET request to "/songs?pagesize=5&offset=9"
 		Then the response status should be 200
 		And the response at path "$.cur_count" should be 2
 		And the response at path "$.pagesize" should be 5
-		And the response at path "$.results[0].name" should be "Vivaldi Allegro Mashup"
+		And the response at path "$.results[0].title" should be "Vivaldi Allegro Mashup"
