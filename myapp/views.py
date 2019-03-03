@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, Response
 from .db import get_db
 from json import JSONEncoder
 from bson import ObjectId
@@ -13,6 +13,10 @@ class MyJSONEncoder(JSONEncoder):
 
 
 jsonify = MyJSONEncoder().encode
+
+
+def json_response(x):
+    return Response(jsonify(x), mimetype="application/json")
 
 
 class BadRequestException(Exception):
@@ -45,7 +49,7 @@ def setup_views(app):
 
         results = [x for x in cursor]
 
-        return jsonify({
+        return json_response({
             "offset": offset,
             "pagesize": pagesize,
             "cur_count": len(results),
@@ -74,7 +78,7 @@ def setup_views(app):
 
         results = [x for x in cursor]
 
-        return jsonify({
+        return json_response({
             "offset": offset,
             "pagesize": pagesize,
             "cur_count": len(results),
@@ -112,7 +116,7 @@ def setup_views(app):
                         for k, v in query_filters.items()
                     ])))
 
-        return jsonify(results[0])
+        return json_response(results[0])
 
     @app.route("/songs/rating", methods=["POST"])
     def add_rating_route():
@@ -164,7 +168,7 @@ def setup_views(app):
             },
             return_document=ReturnDocument.AFTER)
 
-        return jsonify(updated_song["ratings"])
+        return json_response(updated_song["ratings"])
 
     @app.route("/songs/avg/rating")
     def show_ratings_route():
@@ -187,5 +191,4 @@ def setup_views(app):
             "avg_rating": 0
         }
 
-        return jsonify(info)
-
+        return json_response(info)

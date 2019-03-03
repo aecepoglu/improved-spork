@@ -106,6 +106,7 @@ def check_array_len_jsonpath(context, path, count):
 
 @then(u"the response json schema should be")
 def check_jsonschema(context):
+    ensure(context.response.headers["Content-Type"]).is_equal_to("application/json")
     validate_jsonschema(
         instance=parse_json_or_cry(context.response.data, "resp wasn't json"),
         schema=parse_json_or_cry(context.text, "schema isn't json"))
